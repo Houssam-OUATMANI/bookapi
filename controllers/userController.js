@@ -24,7 +24,7 @@ class UserController {
         if (user) return res.status(409).json({ message: "Account already exists" })
         
         // Hashage du mot de passe avant de le stocker en base de données
-        const hash = await bcrypt.hash(value.password, process.env.BCRYPT_SALT)
+        const hash = await bcrypt.hash(value.password, +process.env.BCRYPT_SALT)
         
         // Création d'un nouvel utilisateur avec les données fournies
         await userModel.create({
@@ -76,7 +76,8 @@ class UserController {
             message: "Successfully authenticated",
             data: {
                 token: jwtToken,
-                date: Date.now()
+                date: Date.now(),
+                _id: user._id
             }
         })
     }
