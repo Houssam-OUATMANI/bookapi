@@ -1,7 +1,7 @@
 import express from "express"
-import { authorModel } from "../models/authorSchema.js"
+import { bookModel } from "../models/bookSchema.js"
 
-class AuthorController {
+class BookController {
 
     /**
     * Gère la création d'un nouvel utilisateur.
@@ -10,13 +10,12 @@ class AuthorController {
     * @param {express.Response} res - La réponse HTTP sortante.
     */
     async store(req, res) {
-        const { firstname, lastname, dob, biography, nationality, _id } = req.body
-        // TODO VALIDER LES DONNES
-        await authorModel.create({
-            biography, firstname, lastname, nationality, dob, user: _id
-        })
+       const body = req.body
+       const file = req.file
 
-        return res.status(201).json({ message: "Author added!!" })
+
+       console.log(body)
+       console.log(file)
     }
 
 
@@ -28,8 +27,12 @@ class AuthorController {
   */
 
     async index(req, res) {
-        const authors = await authorModel.find()
-        return res.status(200).json(authors)
+        const books = await bookModel
+            .find()
+            .populate('authorId')
+            .populate('userId')
+
+        return res.status(200).json(books)
 
     }
 
@@ -42,9 +45,9 @@ class AuthorController {
 
     async show(req, res) {
         const id = req.params.id
-        const author = await authorModel.findById(id)
-        if (!author) return res.status(404).json({ message: "Author Not Found" })
-        return res.status(200).json(author)
+        const book = await bookModel.findById(id)
+        if (!book) return res.status(404).json({ message: "Book Not Found" })
+        return res.status(200).json(book)
     }
 
     //  TODO UPDATE DELETE
@@ -56,4 +59,4 @@ class AuthorController {
 
 
 
-export const authorController = new AuthorController()
+export const bookController = new BookController()

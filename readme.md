@@ -36,6 +36,7 @@
   - Année de publication
   - ISBN
   - Description
+  - Cover
 
 - **Auteurs :**
   - Nom
